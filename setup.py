@@ -12,6 +12,7 @@
 from setuptools import setup
 from torch.utils.cpp_extension import CUDAExtension, BuildExtension
 import os
+import platform
 os.path.dirname(os.path.abspath(__file__))
 
 setup(
@@ -26,7 +27,7 @@ setup(
             "cuda_rasterizer/backward.cu",
             "rasterize_points.cu",
             "ext.cpp"],
-            extra_compile_args={"nvcc": ["-I" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "third_party/glm/")]})
+            extra_compile_args={"nvcc": ["-Xcompiler","-fno-gnu-unique" if platform.system() == "Linux" else "","-I" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "third_party/glm/")]})
         ],
     cmdclass={
         'build_ext': BuildExtension
